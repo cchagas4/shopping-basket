@@ -1,6 +1,7 @@
 package com.interview.shoppingbasket;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class Basket {
@@ -20,6 +21,18 @@ public class Basket {
     }
 
     public void consolidateItems() {
-        // Exercise - implement this function TODO
+        HashMap<String, Integer> quantityPerProductCode = new HashMap<>();
+        HashMap<String, BasketItem> basketItemPerProductCode = new HashMap<>();
+
+        for (BasketItem basketItem : items) {
+            String productCode = basketItem.getProductCode();
+
+            quantityPerProductCode.merge(productCode, basketItem.getQuantity(), Integer::sum);
+            basketItem.setQuantity(quantityPerProductCode.get(productCode));
+
+            basketItemPerProductCode.put(productCode, basketItem);
+        }
+
+        items = new ArrayList<>(basketItemPerProductCode.values());
     }
 }
