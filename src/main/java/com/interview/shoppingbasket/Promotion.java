@@ -9,6 +9,15 @@ public class Promotion {
     int freeItemsQuantity;
     boolean directDiscount;
 
+    public Promotion(int itemsQuantity, int freeItemsQuantity) {
+        this.createPromotionsFreeItems(itemsQuantity, freeItemsQuantity);
+    }
+
+    public Promotion(int discount) {
+        this.createPromotionDirectDiscount(discount);
+    }
+
+
     public void createPromotionDirectDiscount(int discount) {
         this.discount = discount;
         this.directDiscount = true;

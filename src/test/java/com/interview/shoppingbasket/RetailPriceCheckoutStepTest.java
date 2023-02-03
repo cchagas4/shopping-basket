@@ -58,8 +58,7 @@ public class RetailPriceCheckoutStepTest {
         basketItem.setProductName("product1");
         basketItem.setQuantity(quantity);
 
-        Promotion promotion = new Promotion();
-        promotion.createPromotionsFreeItems(2, 1);
+        Promotion promotion = new Promotion(2, 1);
 
         double finalPrice = retailPriceCheckoutStep.applyPromotion(promotion, basketItem, price);
 
@@ -74,13 +73,11 @@ public class RetailPriceCheckoutStepTest {
         basketItem.setProductName("product1");
         basketItem.setQuantity(quantity);
 
-        Promotion promotion1 = new Promotion();
-        promotion1.createPromotionDirectDiscount(10);
+        Promotion promotion1 = new Promotion(10);
         double price1 = 9.99;
         double expectedFinalValue1 = price1 * quantity * 0.9;
 
-        Promotion promotion2 = new Promotion();
-        promotion2.createPromotionDirectDiscount(65);
+        Promotion promotion2 = new Promotion(65);
         double price2 = 9.99;
         double expectedFinalValue2 = price1 * quantity * 0.35;
 
@@ -101,8 +98,7 @@ public class RetailPriceCheckoutStepTest {
         basketItem.setProductName("product1");
         basketItem.setQuantity(quantity);
 
-        Promotion promotion = new Promotion();
-        promotion.createPromotionsFreeItems(5, 1);
+        Promotion promotion = new Promotion(5, 1);
         double price = 3.99;
         double expectedFinalValue = price * quantity;
 

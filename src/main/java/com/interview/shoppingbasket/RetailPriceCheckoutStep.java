@@ -16,19 +16,28 @@ public class RetailPriceCheckoutStep implements CheckoutStep {
         for (BasketItem basketItem : basket.getItems()) {
             int quantity = basketItem.getQuantity();
             double price = pricingService.getPrice(basketItem.getProductCode());
-            basketItem.setProductRetailPrice(price);
-            retailTotal += quantity * price;
-        }
 
+            if ((checkoutContext.getPromotions()).isEmpty()) {
+                retailTotal += quantity * price;
+            } else {
+                double finalPrice = 0.0;
+                for (Promotion promotion : checkoutContext.getPromotions()) {
+                    finalPrice = applyPromotion(promotion, basketItem, price);
+                }
+                retailTotal += finalPrice;
+            }
+            basketItem.setProductRetailPrice(price);
+        }
         checkoutContext.setRetailPriceTotal(retailTotal);
     }
 
     public double applyPromotion(Promotion promotion, BasketItem item, double price) {
+        double promotionPrice;
 
         int currentQuantity = item.getQuantity();
         if (promotion.isDirectDiscount()) {
             double totalPrice = currentQuantity * price;
-            retailTotal = totalPrice * promotion.getPercentage();
+            promotionPrice = totalPrice * promotion.getPercentage();
         } else if (promotion.isValid(currentQuantity)) {
             int promotionQuantity = promotion.getItemsQuantity() + promotion.getFreeItemsQuantity();
             int outPromotionItems = currentQuantity % promotionQuantity;
@@ -40,11 +49,11 @@ public class RetailPriceCheckoutStep implements CheckoutStep {
             double outPromotionPrice = outPromotionItems * price;
             double inPromotionPrice = itemsWillPay * price;
 
-            retailTotal = inPromotionPrice + outPromotionPrice;
+            promotionPrice = inPromotionPrice + outPromotionPrice;
         } else {
-            retailTotal = currentQuantity * price;
+            promotionPrice = currentQuantity * price;
         }
 
-        return retailTotal;
+        return promotionPrice;
     }
 }
